@@ -36,12 +36,12 @@ var colorCodes = {
  */
 
 function dev(opts) {
-  var logger = opts.logger || console.log;
+  var _logger = opts.log || console.log;
 
   return function *logger(next) {
     // request
     var start = new Date;
-    logger('  ' + chalk.gray('<--')
+    _logger('  ' + chalk.gray('<--')
       + ' ' + chalk.bold('%s')
       + ' ' + chalk.gray('%s'),
         this.method,
@@ -81,7 +81,7 @@ function dev(opts) {
     function done(event){
       res.removeListener('finish', onfinish);
       res.removeListener('close', onclose);
-      log(ctx, logger, start, counter ? counter.length : length, null, event);
+      log(ctx, _logger, start, counter ? counter.length : length, null, event);
     }
   }
 }
@@ -90,7 +90,7 @@ function dev(opts) {
  * Log helper.
  */
 
-function log(ctx, logger, start, len, err, event) {
+function log(ctx, _logger, start, len, err, event) {
   // get the status code of the response
   var status = err
     ? (err.status || 500)
@@ -114,7 +114,7 @@ function log(ctx, logger, start, len, err, event) {
     : event === 'close' ? chalk.yellow('-x-')
     : chalk.gray('-->')
 
-  logger('  ' + upstream
+  _logger('  ' + upstream
     + ' ' + chalk.bold('%s')
     + ' ' + chalk.gray('%s')
     + ' ' + chalk[color]('%s')
