@@ -44,14 +44,34 @@ var app = koa()
 app.use(logger({logger: other_logger}))
 
 function other_logger() {
-  console.log(new Date() + " " + Array.prototype.join.call(arguments, ' '))
+  // Append the current date to each logged item
+  var str1 = new Date() + " " + arguments[0]
+
+  var other_strings = Array.prototype.slice.call(arguments, 1)
+
+  // See note 2 below
+  var message = util.format.apply([str1].concat(other_strings))
+  console.log(message)
 }
 ```
 
 ## Notes
 
-Recommended that you `.use()` this middleware near the top to "wrap" all
+1. Recommended that you `.use()` this middleware near the top to "wrap" all
 subsequent middleware.
+
+1. If the logger option is used, note that the first argument passed to the
+logger function will be a `printf`-like string of placeholders, so arguments
+must be passed into `util.format` (or `console.log`, which automatically formats
+its arguments). See
+[util.format](https://nodejs.org/docs/latest/api/util.html#util_util_format_format)
+docs for more information
+
+1. Arguments passed to the logger option, if used, will contain ascii color
+codes. To strip out these codes (e.g. if you're logging to a file), you can use
+`chalk.stripCodes()`. See
+[chalk](https://www.npmjs.com/package/chalk#chalk-stripcolor-string) docs for
+more information.
 
 ## License
 
