@@ -36,7 +36,7 @@ var colorCodes = {
  */
 
 function dev(opts) {
-  var _logger = opts.log || console.log;
+  var _logger = (opts || {}).logger || console.log;
 
   return function *logger(next) {
     // request

@@ -33,10 +33,25 @@ var app = koa()
 app.use(logger())
 ```
 
+It is possible to specify your own logging method (instead of just logging to
+the console). E.g.:
+
+```js
+var logger = require('koa-logger')
+var koa = require('koa')
+
+var app = koa()
+app.use(logger({logger: other_logger}))
+
+function other_logger() {
+  console.log(new Date() + " " + Array.prototype.join.call(arguments, ' '))
+}
+```
+
 ## Notes
 
-  Recommended that you `.use()` this middleware near the top
-  to "wrap" all subsequent middleware.
+Recommended that you `.use()` this middleware near the top to "wrap" all
+subsequent middleware.
 
 ## License
 
